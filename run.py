@@ -3,8 +3,8 @@ import re
 class CustomEvaluator:
     def __init__(self):
         # Initializing with default precedence, associativity, and new operators
-        self.precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3, '>': 0, '<': 0, '>=': 0, '<=': 0}
-        self.associativity = {'+': 'L', '-': 'L', '*': 'L', '/': 'L', '^': 'R', '>': 'L', '<': 'L', '>=': 'L', '<=': 'L'}
+        self.precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3, '>': 0, '<': 0, '>=': 0, '<=': 0 , 'and':0, 'or':0}
+        self.associativity = {'+': 'L', '-': 'L', '*': 'L', '/': 'L', '^': 'R', '>': 'L', '<': 'L', '>=': 'L', '<=': 'L', 'and':'L','or':'L'}
         self.global_associativity = None
 
     def set_associativity(self, operator, assoc):
@@ -48,6 +48,10 @@ class CustomEvaluator:
                 values.append(left >= right)
             elif operator == '<=':
                 values.append(left <= right)
+            elif operator == 'and':
+                values.append(left and right)
+            elif operator == 'or':
+                values.append(left or right)
 
         def greater_precedence(op1, op2):
             if self.global_associativity:
@@ -58,7 +62,7 @@ class CustomEvaluator:
                        (self.precedence[op1] == self.precedence[op2] and self.associativity[op1] == 'L')
 
         # Improved tokenizer to handle expressions with relational operators
-        tokens = re.findall(r'\d+|[+/*^()-]|>=|<=|>|<', expression)
+        tokens = re.findall(r'\d+|[+/*^()-]|>=|<=|>|<|or|and', expression)
         values = []
         operators = []
 
